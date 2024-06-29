@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import Screen from "./Screen";
 
-import LocomotiveScroll from "locomotive-scroll";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(RelativeTime);
-new LocomotiveScroll();
 const weddingDate = new Date("2024-10-19");
 weddingDate.setHours(15);
 weddingDate.setMinutes(0);
