@@ -34,7 +34,7 @@ function App() {
     };
   }, []);
   return (
-    <div className="h-screen snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto">
+    <div className="h-dvh snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto">
       <Screen>
         <div className="flex-1 ">
           <img
