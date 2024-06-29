@@ -34,9 +34,9 @@ function App() {
     };
   }, []);
   return (
-    <div className="h-screen snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto">
+    <div className="h-dvh snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto">
       <Screen>
-        <div className="flex-1 ">
+        <div className="flex-1 h-full">
           <img
             src="/pruebita.jpg"
             className="object-cover h-full w-full flex-1 rounded-b-2xl  object-center"
@@ -47,7 +47,7 @@ function App() {
         </div>
       </Screen>
       <Screen>
-        <div className="flex flex-col justify-center gap-10 text-center h-full w-full">
+        <div className="flex flex-col h-full justify-center gap-10 text-center  w-full">
           <span className="text-xl mb-6">Nos Casamos!</span>
           <div className="px-16 ">
             <h1 className="iniciales leading-[80%] text-left text-7xl">Kari</h1>
@@ -64,7 +64,7 @@ function App() {
         </div>
       </Screen>
       <Screen>
-        <div className="flex flex-col h-full ">
+        <div className="flex flex-col flex-1">
           <div className="tracking-wider flex relative pt-20  mx-auto text-center gap-4 items-center h-min">
             <div className="border-t w-24 uppercase border-t-gray-500 border-b-gray-500 border-b">
               Sabado
