@@ -742,6 +742,23 @@ function App() {
               src="/delfinal2.jpg"
               className="rounded-xl aspect-square object-cover object-top"
             />
+
+            <img
+              src="/delfinal3.jpg"
+              className="rounded-xl aspect-square object-cover object-top"
+            />
+            <img
+              src="/delfinal4.jpg"
+              className="rounded-xl aspect-square object-cover object-top"
+            />
+            <img
+              src="/delfinal6.jpg"
+              className="rounded-xl aspect-square object-cover object-top"
+            />
+            <img
+              src="/delfinal5.jpg"
+              className="rounded-xl aspect-square object-cover object-top"
+            />
           </div>
         </div>
       </Screen>
