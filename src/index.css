@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 .iniciales {
-  font-family: "Arizonia", cursive;
+  font-family: "Parisienne", cursive;
   font-optical-sizing: auto;
   font-style: normal;
 }
