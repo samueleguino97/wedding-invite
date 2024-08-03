@@ -730,9 +730,7 @@ function App() {
       </Screen>
       <Screen>
         <div className="flex flex-col  pt-12 overflow-hidden">
-          <h1 className="iniciales text-4xl text-center mb-4 ">
-            Te Esperamos Perro
-          </h1>
+          <h1 className="iniciales text-4xl text-center mb-4 ">Te Esperamos</h1>
           <div className="flex flex overflow-auto gap-4 px-6">
             <img
               src="/delfinal1.jpg"
