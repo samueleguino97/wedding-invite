@@ -3,8 +3,15 @@ import Screen from "./Screen";
 
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
+import { createClient } from "@supabase/supabase-js";
 dayjs.extend(RelativeTime);
 const weddingDate = new Date("2024-10-19");
+
+const supabase = createClient(
+  "https://kbdwgagttdoulfzfxkbu.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiZHdnYWd0dGRvdWxmemZ4a2J1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjMzMjU3ODAsImV4cCI6MjAzODkwMTc4MH0.RfD8PvPhboMJzL8X04-rAEQ3NgVBJzQa581-RylXMU4"
+);
+
 weddingDate.setHours(15);
 weddingDate.setMinutes(0);
 weddingDate.setDate(19);
@@ -25,6 +32,10 @@ function getTimeData() {
 }
 function App() {
   const [fecha, setFecha] = useState(getTimeData());
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
       setFecha(getTimeData());
@@ -48,7 +59,7 @@ function App() {
       </Screen>
       <Screen>
         <div className="flex flex-col h-full justify-center gap-10 text-center  w-full">
-          <span className="text-xl mb-6">Nos Casamos!</span>
+          <span className="text-xl mb-6">¡Nos casamos!</span>
           <div className="px-16 ">
             <h1 className="iniciales leading-[80%] text-left text-7xl">Kari</h1>
             <h1 className="iniciales leading-[80%] text-center text-7xl">&</h1>
@@ -57,9 +68,9 @@ function App() {
             </h1>
           </div>
           <p className="px-8 mt-4 text-lg">
-            "Hay momentos en la vida que son muy especiales por si solos, Pero
-            al compartirlo con personas tan especiales como tu se convierten en
-            momentos imposibles de olvidar."
+            Hay momentos en la vida que son muy especiales por sí solos, pero al
+            compartirlos con personas tan especiales como tú, se convierten en
+            momentos imposibles de olvidar.
           </p>
         </div>
       </Screen>
@@ -96,7 +107,7 @@ function App() {
             <div className=" mx-auto text-center flex flex-col gap-1 ">
               <p className="tracking-widest uppercase">Condominio La Serena</p>
               <p className="font-semibold tracking-widest">HORA: 15:00 PM</p>
-              <p className="">Como Llegar?</p>
+              <p className="">¿Cómo llegar?</p>
               <a
                 target="_blank"
                 href="https://maps.app.goo.gl/AFWjddBxTurpUdgdA"
@@ -161,49 +172,136 @@ function App() {
           <span className="text-center mx-auto block mt-4">
             Por favor, confirma tu asisitencia
           </span>
-          <form className="flex flex-col  mt-8 gap-4">
-            <input
-              placeholder="Nombre y Apellido"
-              className="rounded px-4 py-2 border-emerald-800 border bg-orange-100 "
-            />
-            <div className="flex gap-2 w-full">
-              <input
-                placeholder="Asistiras?"
-                className="rounded  flex-1 px-4 w-full py-2 placeholder:text-gray-400 border-emerald-800 border bg-orange-100"
-              />
-              <input
-                placeholder="Acompañante?"
-                className="rounded flex-1 w-full px-4  py-2 border-emerald-800 border bg-orange-100"
-              />
+          {submitted ? (
+            <div className="flex flex-1 pt-12 items-center justify-center">
+              <h1 className="text-center font-medium tracking-wider text-lg">
+                GRACIAS POR CONFIRMAR TU ASISTENCIA
+              </h1>
             </div>
-            <textarea
-              rows={3}
-              placeholder="Mensaje"
-              className=" rounded px-4 py-2 border-emerald-800 border bg-orange-100"
-            />
-            <button className="bg-emerald-800 rounded w-full px-4 py-2 text-white font-medium hover:opacity-80">
-              Enviar Respuesta
-            </button>
-          </form>
+          ) : (
+            <form
+              onSubmit={async (ev) => {
+                ev.preventDefault();
+                try {
+                  setSubmitting(true);
+                  const formData = new FormData(ev.currentTarget);
+                  const entries = Object.fromEntries(formData.entries());
+                  const { error } = await supabase.from("invitees").insert({
+                    full_name: entries.full_name,
+                    asisting: entries.asisting,
+                    partner: entries.partner,
+                    message: entries.message,
+                  });
+                  if (error) {
+                    console.log(error);
+                    return;
+                  }
+                  setSubmitted(true);
+                } finally {
+                  setSubmitting(false);
+                }
+              }}
+              className="flex flex-col  mt-8 gap-4"
+            >
+              <input
+                placeholder="Nombre y Apellido"
+                name="full_name"
+                className="rounded px-4 py-2 border-emerald-800 border bg-orange-100 "
+              />
+              <div className="flex gap-2 w-full">
+                <input
+                  placeholder="Asistiras?"
+                  name="asisting"
+                  className="rounded  flex-1 px-4 w-full py-2 placeholder:text-gray-400 border-emerald-800 border bg-orange-100"
+                />
+                <input
+                  placeholder="Acompañante?"
+                  name="partner"
+                  className="rounded flex-1 w-full px-4  py-2 border-emerald-800 border bg-orange-100"
+                />
+              </div>
+              <textarea
+                rows={3}
+                placeholder="Mensaje"
+                name="message"
+                className=" rounded px-4 py-2 border-emerald-800 border bg-orange-100"
+              />
+              <button className="bg-emerald-800 rounded w-full px-4 py-2 text-white font-medium hover:opacity-80">
+                Enviar Respuesta
+              </button>
+            </form>
+          )}
         </div>
         <div className="h-[1px] w-3/4 rounded bg-black/50 mx-auto my-6 mb-8"></div>
         <div className="px-6">
-          <div className="text-center flex flex-col gap-4">
+          <form
+            onSubmit={(ev) => ev.preventDefault()}
+            className="text-center flex flex-col gap-4"
+          >
             <h5 className="font-medium text-xl  tracking-wider">FOTOS</h5>
             <p className="text-sm px-8">
+              {uploaded
+                ? `
+
+                Gracias por compartirnos tu foto! si quieres seguir subiendo mas
+                solo haz click al icono de camara de nuevo
+`
+                : `
               El dia de la boda toma muchas fotos y dejanos un bonito y
               divertido recuerdo haciendo click en el icono de la camara
+`}
             </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              viewBox="-5.0 -10.0 110.0 135.0"
-              className="w-12 aspect-square mx-auto"
-            >
-              <path d="m13.477 84.375h73.047c3.9844 0 7.2266-3.2422 7.2266-7.2266v-46.098c0-3.9844-3.2422-7.2266-7.2266-7.2266h-19.738c-0.53906 0-0.97656-0.4375-0.97656-0.97656 0-3.9844-3.2422-7.2266-7.2266-7.2266h-17.176c-3.9844 0-7.2266 3.2422-7.2266 7.2266 0 0.53906-0.4375 0.97656-0.97656 0.97656h-19.727c-3.9844 0-7.2266 3.2422-7.2266 7.2266v46.102c0 3.9844 3.2422 7.2266 7.2266 7.2266zm-0.97656-53.324c0-0.53906 0.4375-0.97656 0.97656-0.97656h19.738c3.9844 0 7.2266-3.2422 7.2266-7.2266 0-0.53906 0.4375-0.97656 0.97656-0.97656h17.176c0.53906 0 0.97656 0.4375 0.97656 0.97656 0 3.9844 3.2422 7.2266 7.2266 7.2266h19.738c0.53906 0 0.97656 0.4375 0.97656 0.97656v46.102c0 0.53906-0.4375 0.97656-0.97656 0.97656l-73.059-0.003906c-0.53906 0-0.97656-0.4375-0.97656-0.97656z" />
-              <path d="m50 71.156c9.5859 0 17.391-7.8047 17.391-17.391s-7.8047-17.391-17.391-17.391-17.391 7.8047-17.391 17.391 7.8047 17.391 17.391 17.391zm0-28.531c6.1445 0 11.141 4.9961 11.141 11.141s-4.9961 11.141-11.141 11.141-11.141-4.9961-11.141-11.141 4.9961-11.141 11.141-11.141z" />
-            </svg>
-          </div>
+            <label>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.1"
+                viewBox="-5.0 -10.0 110.0 135.0"
+                className="w-12 aspect-square mx-auto"
+              >
+                <path d="m13.477 84.375h73.047c3.9844 0 7.2266-3.2422 7.2266-7.2266v-46.098c0-3.9844-3.2422-7.2266-7.2266-7.2266h-19.738c-0.53906 0-0.97656-0.4375-0.97656-0.97656 0-3.9844-3.2422-7.2266-7.2266-7.2266h-17.176c-3.9844 0-7.2266 3.2422-7.2266 7.2266 0 0.53906-0.4375 0.97656-0.97656 0.97656h-19.727c-3.9844 0-7.2266 3.2422-7.2266 7.2266v46.102c0 3.9844 3.2422 7.2266 7.2266 7.2266zm-0.97656-53.324c0-0.53906 0.4375-0.97656 0.97656-0.97656h19.738c3.9844 0 7.2266-3.2422 7.2266-7.2266 0-0.53906 0.4375-0.97656 0.97656-0.97656h17.176c0.53906 0 0.97656 0.4375 0.97656 0.97656 0 3.9844 3.2422 7.2266 7.2266 7.2266h19.738c0.53906 0 0.97656 0.4375 0.97656 0.97656v46.102c0 0.53906-0.4375 0.97656-0.97656 0.97656l-73.059-0.003906c-0.53906 0-0.97656-0.4375-0.97656-0.97656z" />
+                <path d="m50 71.156c9.5859 0 17.391-7.8047 17.391-17.391s-7.8047-17.391-17.391-17.391-17.391 7.8047-17.391 17.391 7.8047 17.391 17.391 17.391zm0-28.531c6.1445 0 11.141 4.9961 11.141 11.141s-4.9961 11.141-11.141 11.141-11.141-4.9961-11.141-11.141 4.9961-11.141 11.141-11.141z" />
+              </svg>
+              <input
+                name="foto"
+                type="file"
+                onChange={async (ev) => {
+                  if (ev.target.files?.[0]) {
+                    const file = ev.target.files[0];
+                    setUploading(true);
+                    const { error } = await supabase.storage
+                      .from("photos")
+                      .upload(
+                        `photos/${Date.now()}.${file.name.split(".").pop()}`,
+                        file,
+                        {
+                          cacheControl: "3600",
+                          upsert: true,
+                        }
+                      );
+                    if (error) {
+                      console.log(error);
+                      setUploading(false);
+
+                      return;
+                    }
+                    setUploading(false);
+                    setUploaded(true);
+                  }
+                }}
+                className="hidden"
+              />
+            </label>
+            {uploading ? (
+              <span>Subiendo foto...</span>
+            ) : (
+              <span>
+                {uploaded
+                  ? `
+`
+                  : null}
+              </span>
+            )}
+          </form>
         </div>
       </Screen>
       <Screen>
@@ -216,7 +314,7 @@ function App() {
           <path d="m78.473 19.695h-21.105c5.7188-2.0781 10.785-3.3672 10.855-3.3867 0.42969-0.10938 0.78516-0.39844 0.98047-0.79688 0.19141-0.39844 0.20312-0.85938 0.023437-1.2617l-2.7891-6.3438c-0.31641-0.71875-1.1367-1.0703-1.875-0.80859-4.9453 1.7578-10.055 6.6211-13.121 9.9219l1.8398-6.8242c0.12109-0.44922 0.027344-0.93359-0.25781-1.3047-0.28516-0.37109-0.72266-0.58984-1.1914-0.58984h-6.1406c-0.46875 0-0.90625 0.21875-1.1914 0.58984s-0.37891 0.85156-0.25781 1.3008l2.3711 8.793c-2.4609-2.8672-8.8047-9.7305-14.883-11.891-0.74219-0.26172-1.5586 0.089844-1.875 0.80859l-2.7891 6.3438c-0.17969 0.40234-0.16797 0.86719 0.023438 1.2617 0.19141 0.39453 0.55469 0.6875 0.98047 0.79688 0.070313 0.019531 5.1367 1.3086 10.859 3.3867h-17.609c-5.0117 0-9.0898 4.0781-9.0898 9.0938v9.7031c0 0.39844 0.15625 0.78125 0.44141 1.0625 0.28125 0.28125 0.66406 0.4375 1.0586 0.4375h0.003906 0.89453c-0.027344 0.11328-0.046875 0.23047-0.046875 0.35547v42.414c0 5.6406 4.5898 10.227 10.227 10.227h50.18c5.6406 0 10.227-4.5898 10.227-10.227v-42.414c0-0.16016-0.03125-0.3125-0.078125-0.45703h0.92969c0.82812 0 1.4961-0.67188 1.4961-1.5v-9.5977c0-5.0156-4.0781-9.0938-9.0898-9.0938zm6.0898 9.0898v8.1016l-27.512 0.035156v-14.227h21.422c3.3594 0 6.0898 2.7344 6.0898 6.0898zm-38.824-6.0898h8.3125v67.293h-8.3125zm18.547-12.234 1.4922 3.3945c-2.168 0.60156-6.1172 1.7656-10.336 3.3438 2.4883-2.4727 5.7109-5.2539 8.8438-6.7383zm-14.406 0.84375-1.1133 4.1289-1.1133-4.1289zm-17.867-0.84375c3.1328 1.4844 6.3516 4.2656 8.8398 6.7383-4.2188-1.5781-8.1641-2.7422-10.332-3.3438zm-16.781 18.324c0-3.3594 2.7305-6.0938 6.0898-6.0938h21.422v14.258l-27.512 0.035156zm2.3477 53.977v-42.418c0-0.125-0.019531-0.24219-0.046875-0.35938l25.211-0.03125v50.035h-17.938c-3.9844 0-7.2266-3.2422-7.2266-7.2266zm64.637-42.418v42.414c0 3.9844-3.2422 7.2266-7.2266 7.2266l-17.934 0.003906v-50.062l25.238-0.035156c-0.046875 0.14453-0.078125 0.29688-0.078125 0.45312z" />
         </svg>
         <p className="text-center px-6 text-base    py-4">
-          El mejor regalo sera tu presencia en nuestro dia, Si gustas darnos un
+          El mejor regalo será tu presencia en nuestro día. Si gustas darnos un
           obsequio:
         </p>
         <div className="mx-auto tracking-wider text-center font-medium">
@@ -729,8 +827,10 @@ function App() {
         </div>
       </Screen>
       <Screen>
-        <div className="flex flex-col  pt-12 overflow-hidden">
-          <h1 className="iniciales text-4xl text-center mb-4 ">Te Esperamos</h1>
+        <div className="flex flex-col h-full pt-12 overflow-hidden">
+          <h1 className="iniciales text-4xl text-center mb-4 ">
+            ¡Te esperamos!
+          </h1>
           <div className="flex flex overflow-auto gap-4 px-6">
             <img
               src="/delfinal1.jpg"
@@ -757,6 +857,19 @@ function App() {
               src="/delfinal5.jpg"
               className="rounded-xl aspect-square object-cover object-top"
             />
+          </div>
+          <div className="flex-1 flex items-center justify-center ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              viewBox="-5.0 -10.0 110.0 135.0"
+              className="h-44  "
+            >
+              <path
+                d="m55.832 38.434c-5.1445 1.5586-9.6211 4.668-12.887 8.7812-3.5391 4.457-5.6562 10.105-5.6562 16.25 0 7.2227 2.9258 13.758 7.6602 18.488 4.7305 4.7305 11.27 7.6602 18.488 7.6602 7.2227 0 13.758-2.9258 18.488-7.6602 4.7305-4.7305 7.6602-11.27 7.6602-18.488 0-6.6445-2.4648-12.699-6.5312-17.305-3.2734-3.707-7.5859-6.4805-12.488-7.8633 0.41797 1.5703 0.71484 3.1914 0.87891 4.8516 3.8477 1.5195 7.1602 4.0977 9.5781 7.3711 2.6758 3.625 4.2539 8.1016 4.2539 12.941 0 6.0312-2.4453 11.492-6.3984 15.441-3.9531 3.9531-9.4141 6.3984-15.441 6.3984-6.0312 0-11.492-2.4453-15.441-6.3984-3.9531-3.9531-6.3984-9.4141-6.3984-15.441 0-5.3281 1.9141-10.215 5.0898-14.008 2.7383-3.2734 6.418-5.7266 10.625-6.957-0.32422-1.4297-0.82422-2.793-1.4805-4.0625zm8.957-2.293c1.3047 3.1094 2.0234 6.5273 2.0234 10.113 0 6.1445-2.1133 11.793-5.6562 16.25-3.2695 4.1133-7.7422 7.2188-12.887 8.7812-0.65625-1.2695-1.1562-2.6328-1.4805-4.0664 4.207-1.2266 7.8867-3.6836 10.625-6.957 3.1758-3.793 5.0898-8.6797 5.0898-14.008 0-6.0312-2.4453-11.492-6.3984-15.441-3.0352-3.0352-6.957-5.1797-11.344-6.0117l3.1523-3.6797c5.2852 1.5234 9.8867 4.668 13.227 8.8672 1.4492 1.8203 2.6602 3.8398 3.5859 6.0117 0.023438 0.042969 0.042969 0.09375 0.0625 0.14062zm-31.25 35.277c-0.41797-1.5703-0.71484-3.1914-0.87891-4.8516-3.8477-1.5195-7.1602-4.0977-9.5781-7.375-2.6719-3.625-4.2539-8.1016-4.2539-12.941 0-6.0312 2.4453-11.492 6.3984-15.441 2.9531-2.9531 6.7461-5.0625 10.992-5.9414l-3.1328-3.6523c-5.1953 1.5742-9.7148 4.7266-12.996 8.9023-3.4883 4.4414-5.5703 10.043-5.5703 16.137 0 6.6445 2.4648 12.699 6.5312 17.305 3.2773 3.707 7.5898 6.4766 12.488 7.8594zm11.672-52.555c0.035156-0.042969 0.070312-0.085937 0.10937-0.12891l4.2383-4.9453-3.2656-3.4023h-11.664l-3.2656 3.4023 9.0977 10.613zm-34.793-0.56641c0.88281-0.63672 1.7109-1.3398 2.4766-2.1055s1.4727-1.5977 2.1055-2.4766c0.63281 0.88281 1.3398 1.7109 2.1055 2.4766 0.76562 0.76953 1.5977 1.4727 2.4766 2.1055-0.88281 0.63672-1.7109 1.3398-2.4766 2.1055s-1.4727 1.5977-2.1055 2.4766c-0.63672-0.88281-1.3398-1.7109-2.1055-2.4766s-1.5938-1.4688-2.4766-2.1055zm58.027 4.5859c0.63281-0.88281 1.3398-1.7109 2.1055-2.4766s1.5977-1.4727 2.4766-2.1055c-0.88281-0.63672-1.7109-1.3398-2.4766-2.1055-0.76562-0.76562-1.4727-1.5977-2.1055-2.4766-0.63281 0.88281-1.3398 1.7109-2.1055 2.4766-0.76562 0.76953-1.5977 1.4727-2.4766 2.1055 0.88281 0.63672 1.7109 1.3398 2.4766 2.1055s1.4727 1.5938 2.1055 2.4766z"
+                fill-rule="evenodd"
+              />
+            </svg>
           </div>
         </div>
       </Screen>
