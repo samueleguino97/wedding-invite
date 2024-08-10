@@ -226,7 +226,10 @@ function App() {
                 name="message"
                 className=" rounded px-4 py-2 border-emerald-800 border bg-orange-100"
               />
-              <button className="bg-emerald-800 rounded w-full px-4 py-2 text-white font-medium hover:opacity-80">
+              <button
+                disabled={submitting}
+                className="bg-emerald-800 rounded w-full px-4 py-2 text-white font-medium hover:opacity-80"
+              >
                 Enviar Respuesta
               </button>
             </form>
