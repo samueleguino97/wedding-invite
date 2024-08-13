@@ -6,7 +6,9 @@ interface ScreenProps {
 
 function Screen({ children }: ScreenProps) {
   return (
-    <div className="h-dvh flex flex-col w-full snap-start">{children}</div>
+    <div className="h-dvh flex flex-col w-full snap-start relative">
+      {children}
+    </div>
   );
 }
 
