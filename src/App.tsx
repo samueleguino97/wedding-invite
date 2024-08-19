@@ -275,7 +275,7 @@ function App() {
               CONFIRMAR ASISTENCIA
             </h1>
             <span className="text-center mx-auto block mt-4">
-              Por favor, confirma tu asisitencia
+              Por favor, confirma tu asistencia
             </span>
             {submitted ? (
               <div className="flex flex-1 pt-12 items-center justify-center">
