@@ -48,15 +48,17 @@ function App() {
   return (
     <div className="h-dvh snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto overflow-x-hidden">
       <Screen>
-        <div className="flex-1 h-full p-4">
+        <div className="grid grid-cols-1 grid-rows-[85%_max-content] h-screen">
+        <div className="h-full p-4">
           <img
             src="/portada.jpg"
             className="object-cover h-full w-full flex-1 rounded-2xl  object-center"
           />
         </div>
-        <div className="h-[15%] text-5xl  flex bg-transparent items-center justify-center iniciales">
-          <img src="/logo.png" className="w-full max-w-[200px] mx-auto" />
+        <div className=" flex-1 text-5xl  flex bg-transparent items-center justify-center iniciales">
+          <img src="/logo.png" className="w-full object-contain max-w-[200px] mx-auto h-full" />
         </div>
+</div>
       </Screen>
       <Screen>
         <Leaves position="topleft" rotation="topleft" leaveUrl="/leaves1.png" />
