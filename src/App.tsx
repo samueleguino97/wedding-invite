@@ -46,7 +46,7 @@ function App() {
     };
   }, []);
   return (
-    <div className="h-dvh snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto overflow-x-hidden">
+    <div className="h-dvh snap-y snap-mandatory bg-white scroll-smooth w-full overflow-auto overflow-x-hidden">
       <Screen>
         <div className="flex-1 h-full p-4">
           <img
@@ -172,12 +172,10 @@ function App() {
             CRONOGRAMA DE ACTIVIDADES
           </h1>
           <svg
-            width="429"
-            height="567"
             viewBox="0 0 429 567"
             fill="none"
-            className="absolute top-40 left-0 w-full h-1/2"
-            preserveAspectRatio="xMidYMid slice"
+            className="absolute top-40 left-0 w-full "
+            preserveAspectRatio=""
             xmlns="http://www.w3.org/2000/svg"
           >
             <path

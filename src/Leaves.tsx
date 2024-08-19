@@ -15,8 +15,10 @@ type LeavesProps = {
 export function Leaves({ position, leaveUrl }: LeavesProps) {
   return (
     <div
+    style={{zIndex:10}}
       className={
-        "absolute transition-all w-[70%] " +
+
+        "absolute transition-all w-[70%] max-w-[300px] " +
         leavesPosition[position] +
         " " +
         leavesPosition[position]

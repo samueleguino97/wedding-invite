@@ -5,8 +5,8 @@ interface ScreenProps {
 }
 
 function Screen({ children }: ScreenProps) {
-  return (
-    <div className="h-dvh flex flex-col w-full snap-start relative">
+  return ( 
+    <div className="h-dvh max-w-[500px] bg-orange-100 mx-auto flex flex-col w-full snap-start relative">
       {children}
     </div>
   );
