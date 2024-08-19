@@ -46,7 +46,7 @@ function App() {
     };
   }, []);
   return (
-    <div className="h-dvh snap-y snap-mandatory bg-white scroll-smooth w-full overflow-auto overflow-x-hidden">
+    <div className="h-dvh snap-y snap-mandatory bg-orange-100 scroll-smooth w-full overflow-auto overflow-x-hidden">
       <Screen>
         <div className="flex-1 h-full p-4">
           <img
@@ -55,7 +55,7 @@ function App() {
           />
         </div>
         <div className="h-[15%] text-5xl  flex bg-transparent items-center justify-center iniciales">
-          {"K&B"}
+          <img src="/logo.png" className="w-full max-w-[200px] mx-auto" />
         </div>
       </Screen>
       <Screen>
@@ -75,10 +75,10 @@ function App() {
           rotation="topleft"
           leaveUrl="/leaves2.png"
         />
-        <div className="flex flex-col h-full justify-center gap-10 text-center  w-full">
+        <div className="flex flex-col h-full justify-center items-center gap-10 text-center  w-full">
           <span className="text-xl mb-6">¡Nos casamos!</span>
-          <div className="px-16 ">
-            <h1 className="iniciales leading-[80%] text-left text-7xl">Kari</h1>
+          <div className="px-16  max-w- ">
+            <h1 className="iniciales leading-[80%] mr-32 text-left text-7xl">Kari</h1>
             <h1 className="iniciales leading-[80%] text-center text-7xl">&</h1>
             <h1 className="iniciales leading-[80%] pr-4 text-right text-7xl">
               Bri
@@ -411,16 +411,6 @@ function App() {
       </Screen>
       <Screen>
         <div className="flex flex-col justify-between h-full">
-          <Leaves
-            leaveUrl="/leaves2.png"
-            position="topright"
-            rotation="topleft"
-          />
-          <Leaves
-            leaveUrl="/leaves1.png"
-            position="topleft"
-            rotation="topleft"
-          />
           <div></div>
           <div></div>
           <div>
@@ -439,7 +429,7 @@ function App() {
             <div className="mx-auto tracking-wider text-center font-medium">
               <h4>Sugerencia de Regalo</h4>
             </div>
-            <div className="grid gap-2 mt-4 grid-cols-[1fr_max-content_1fr] px-4 ">
+            <div className="grid gap-2 max-w-[500px] mx-auto mt-4 grid-cols-[1fr_max-content_1fr] px-4 ">
               <div className="text-xs text-center flex flex-col gap-1">
                 <div className="font-bold">Transferencia</div>
                 <div className="">Banco Nacional de Bolivia BNB</div>
@@ -943,6 +933,11 @@ function App() {
               <span className="block mx-auto text-center text-xs max-w-40 mt-2">
                 Av. Blanco Galindo Km 2 1/2 Frente al Hipodromo
               </span>
+            </div>
+            <div>
+
+              <img src="/giftqr.png" className="w-full max-w-[200px] mx-auto my-8" />
+
             </div>
           </div>
           <div></div>
