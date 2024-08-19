@@ -176,7 +176,7 @@ function App() {
           <svg
             viewBox="0 0 429 567"
             fill="none"
-            className="absolute top-40 left-0 w-full "
+            className="absolute max-w-[500px] mx-auto block top-40 left-0 w-full "
             preserveAspectRatio=""
             xmlns="http://www.w3.org/2000/svg"
           >
