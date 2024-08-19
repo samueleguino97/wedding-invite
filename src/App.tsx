@@ -173,6 +173,7 @@ function App() {
           <h1 className="text-xl text-center tracking-widest">
             CRONOGRAMA DE ACTIVIDADES
           </h1>
+          <div className="flex justify-center">
           <svg
             viewBox="0 0 429 567"
             fill="none"
@@ -254,6 +255,7 @@ function App() {
               stroke-dasharray="2 2"
             />
           </svg>
+</div>
           <Leaves
             leaveUrl="/leaves2.png"
             position="bottomleft"
